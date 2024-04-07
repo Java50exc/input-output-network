@@ -2,7 +2,6 @@ package telran.employees.service;
 
 import java.io.*;
 import java.util.List;
-import static telran.employees.api.ErrorMessages.*;
 import telran.employees.dto.Employee;
 
 public interface Company {
@@ -29,7 +28,7 @@ public interface Company {
 		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(dataFile))) {
 			out.writeObject(employees);
 		} catch (IOException e) {
-			throw new RuntimeException(SAVE_ERROR_MESSAGE);
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 	
