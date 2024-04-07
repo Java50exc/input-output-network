@@ -1,8 +1,6 @@
 package telran.employees.service;
 
-import java.util.HashMap;
-import java.util.List;
-
+import java.util.*;
 import telran.employees.dto.Employee;
 
 public class CompanyImpl implements Company {
@@ -10,26 +8,22 @@ public class CompanyImpl implements Company {
 
 	@Override
 	public boolean addEmployee(Employee empl) {
-		// TODO Auto-generated method stub
-		return false;
+		return employees.putIfAbsent(empl.id(), empl) == null;
 	}
 
 	@Override
 	public Employee removeEmployee(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return employees.remove(id);
 	}
 
 	@Override
 	public Employee getEmployee(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return employees.get(id);
 	}
 
 	@Override
 	public List<Employee> getEmployees() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<>(employees.values());
 	}
 
 }
