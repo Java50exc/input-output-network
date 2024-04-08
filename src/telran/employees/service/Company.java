@@ -1,10 +1,9 @@
 package telran.employees.service;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
 import java.util.List;
-import telran.employees.dto.Employee;
+import telran.employees.dto.*;
 
 public interface Company {
 	boolean addEmployee(Employee empl);
@@ -22,7 +21,7 @@ public interface Company {
 		if (Files.exists(Path.of(dataFile))) {
 			try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(dataFile))) {
 				employees = (List<Employee>) in.readObject();
-			} catch (IOException | ClassNotFoundException e) {
+			} catch (Exception e) {
 				new RuntimeException(e.getMessage());
 			}
 			employees.forEach(this::addEmployee);
@@ -38,5 +37,19 @@ public interface Company {
 			throw new RuntimeException(e.getMessage());
 		}
 	}
+
+	List<DepartmentSalary> getDepartmentSalaryDistribution();
+
+	List<SalaryDistribution> getSalaryDistribution(int interval);
+
+	List<Employee> getEmployeesByDepartment(String department);
+
+	List<Employee> getEmployeesBySalary(int salaryFrom, int salaryTo);
+
+	List<Employee> getEmployeesByAge(int ageFrom, int ageTo);
+
+	Employee updateSalary(long id, int newSalary);
+
+	Employee updateDepartment(long id, String department);
 
 }
