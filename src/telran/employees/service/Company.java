@@ -1,6 +1,8 @@
 package telran.employees.service;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import telran.employees.dto.Employee;
 
@@ -17,13 +19,14 @@ public interface Company {
 	default void restore(String dataFile) {
 		List<Employee> employees = null;
 
-		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(dataFile))) {
-			employees = (List<Employee>) in.readObject();
-		} catch (FileNotFoundException e) {
-		} catch (IOException | ClassNotFoundException e) {
-			new RuntimeException(e.getMessage());
+		if (Files.exists(Path.of(dataFile))) {
+			try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(dataFile))) {
+				employees = (List<Employee>) in.readObject();
+			} catch (IOException | ClassNotFoundException e) {
+				new RuntimeException(e.getMessage());
+			}
+			employees.forEach(this::addEmployee);
 		}
-		employees.forEach(this::addEmployee);
 	}
 
 	default void save(String dataFile) {
