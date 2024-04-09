@@ -26,7 +26,7 @@ public class CompanyImpl implements Company {
 		addEmployee(empl, employeesByDepartment, empl.department());
 		addEmployee(empl, employeesBySalary, empl.salary());
 	}
-	
+
 	private <T> void addEmployee(Employee empl, Map<T, List<Employee>> table, T index) {
 		table.computeIfAbsent(index, k -> new LinkedList<>()).add(empl);
 	}
@@ -46,11 +46,11 @@ public class CompanyImpl implements Company {
 		removeEmployee(empl, employeesByDepartment, empl.department());
 		removeEmployee(empl, employeesBySalary, empl.salary());
 	}
-	
+
 	private <T> void removeEmployee(Employee empl, Map<T, List<Employee>> table, T index) {
 		List<Employee> list = table.get(index);
 		list.remove(empl);
-		
+
 		if (list.isEmpty()) {
 			table.remove(index);
 		}
@@ -90,21 +90,12 @@ public class CompanyImpl implements Company {
 
 	@Override
 	public List<Employee> getEmployeesBySalary(int salaryFrom, int salaryTo) {
-		return employeesBySalary
-				.subMap(salaryFrom, salaryTo)
-				.values().stream()
-				.flatMap(List::stream)
-				.toList();
+		return employeesBySalary.subMap(salaryFrom, salaryTo).values().stream().flatMap(List::stream).toList();
 	}
 
 	@Override
 	public List<Employee> getEmployeesByAge(int ageFrom, int ageTo) {
-		return employeesByAge
-				.subMap(ageFrom, ageTo)
-				.values()
-				.stream()
-				.flatMap(List::stream)
-				.toList();
+		return employeesByAge.subMap(ageFrom, ageTo).values().stream().flatMap(List::stream).toList();
 	}
 
 	private int getAge(LocalDate birthDate) {
@@ -114,16 +105,20 @@ public class CompanyImpl implements Company {
 	@Override
 	public Employee updateSalary(long id, int newSalary) {
 		Employee empl = removeEmployee(id);
-		Employee newEmpl = new Employee(id, empl.name(), empl.department(), newSalary, empl.birthDate());
-		addEmployee(newEmpl);
+		if (empl != null) {
+			Employee newEmpl = new Employee(id, empl.name(), empl.department(), newSalary, empl.birthDate());
+			addEmployee(newEmpl);
+		}
 		return empl;
 	}
 
 	@Override
 	public Employee updateDepartment(long id, String department) {
 		Employee empl = removeEmployee(id);
-		Employee newEmpl = new Employee(id, empl.name(), department, empl.salary(), empl.birthDate());
-		addEmployee(newEmpl);
+		if (empl != null) {
+			Employee newEmpl = new Employee(id, empl.name(), department, empl.salary(), empl.birthDate());
+			addEmployee(newEmpl);
+		}
 		return empl;
 	}
 

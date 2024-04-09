@@ -21,7 +21,7 @@ class CompanyTests {
 	private final static Employee EMPLOYEE3 = new Employee(102, "name", "department2", 10000, LocalDate.now());
 	private final static Employee EMPLOYEE4 = new Employee(103, "name", "department2", 7000, LocalDate.now());
 	private final static Employee EMPLOYEE5 = new Employee(104, "name", "department3", 15000, LocalDate.now());
-	private static final List<Employee> EMPLOYEES = List.of(EMPLOYEE1, EMPLOYEE2, EMPLOYEE3, EMPLOYEE4, EMPLOYEE5);
+	private final static List<Employee> EMPLOYEES = List.of(EMPLOYEE1, EMPLOYEE2, EMPLOYEE3, EMPLOYEE4, EMPLOYEE5);
 	Company company;
 
 	@BeforeEach
@@ -109,6 +109,7 @@ class CompanyTests {
 	void getEmployeesBySalary_correctFlow_success() {
 		assertIterableEquals(List.of(EMPLOYEE2, EMPLOYEE4), company.getEmployeesBySalary(5000, 10000));
 	}
+	
 	
 
 
