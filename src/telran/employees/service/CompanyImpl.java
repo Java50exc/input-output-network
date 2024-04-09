@@ -85,7 +85,7 @@ public class CompanyImpl implements Company {
 
 	@Override
 	public List<Employee> getEmployeesByDepartment(String department) {
-		return employeesByDepartment.get(department);
+		return new ArrayList<Employee>(employeesByDepartment.get(department));
 	}
 
 	@Override
