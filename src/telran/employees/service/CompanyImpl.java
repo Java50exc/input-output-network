@@ -1,7 +1,6 @@
 package telran.employees.service;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 import telran.employees.dto.*;
@@ -9,7 +8,7 @@ import telran.employees.dto.*;
 public class CompanyImpl implements Company {
 	HashMap<Long, Employee> employees = new HashMap<>();
 	HashMap<String, List<Employee>> employeesByDepartment = new HashMap<>();
-	TreeMap<Integer, List<Employee>> employeesByAge = new TreeMap<>();
+	TreeMap<LocalDate, List<Employee>> employeesByBirthdate = new TreeMap<>();
 	TreeMap<Integer, List<Employee>> employeesBySalary = new TreeMap<>();
 
 	@Override
@@ -22,7 +21,7 @@ public class CompanyImpl implements Company {
 	}
 
 	private void addEmployeeMulti(Employee empl) {
-		addEmployee(empl, employeesByAge, getAge(empl.birthDate()));
+		addEmployee(empl, employeesByBirthdate, empl.birthDate());
 		addEmployee(empl, employeesByDepartment, empl.department());
 		addEmployee(empl, employeesBySalary, empl.salary());
 	}
@@ -42,7 +41,7 @@ public class CompanyImpl implements Company {
 	}
 
 	private void removeEmployeeMulti(Employee empl) {
-		removeEmployee(empl, employeesByAge, getAge(empl.birthDate()));
+		removeEmployee(empl, employeesByBirthdate, empl.birthDate());
 		removeEmployee(empl, employeesByDepartment, empl.department());
 		removeEmployee(empl, employeesBySalary, empl.salary());
 	}
@@ -95,12 +94,15 @@ public class CompanyImpl implements Company {
 
 	@Override
 	public List<Employee> getEmployeesByAge(int ageFrom, int ageTo) {
-		return employeesByAge.subMap(ageFrom, ageTo).values().stream().flatMap(List::stream).toList();
+		LocalDate dateFrom = getDate(ageTo);
+		LocalDate dateTo = getDate(ageFrom);
+		return employeesByBirthdate.subMap(dateFrom, dateTo).values().stream().flatMap(List::stream).toList();
 	}
 
-	private int getAge(LocalDate birthDate) {
-		return (int) ChronoUnit.YEARS.between(birthDate, LocalDate.now());
+	private LocalDate getDate(int age) {
+		return LocalDate.now().minusYears(age);
 	}
+
 
 	@Override
 	public Employee updateSalary(long id, int newSalary) {
