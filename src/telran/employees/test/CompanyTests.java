@@ -3,6 +3,7 @@ package telran.employees.test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.junit.jupiter.api.*;
@@ -110,6 +111,10 @@ class CompanyTests {
 		assertIterableEquals(List.of(EMPLOYEE2, EMPLOYEE4), company.getEmployeesBySalary(5000, 10000));
 	}
 	
+	
+	private int getAge(LocalDate birthDate) {
+		return (int) ChronoUnit.YEARS.between(birthDate, LocalDate.now());
+	}
 	
 
 
